@@ -1,0 +1,28 @@
+{
+  "name": "fluxible-isomorphic-app",
+  "version": "0.0.1",
+  "description": "how to build an isomorphic app with fluxible",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoover/fluxible-isomorphic-app.git"
+  },
+  "keywords": [
+    "fluxible",
+    "isomorphic",
+    "tutorial",
+    "react"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zoover/fluxible-isomorphic-app/issues"
+  },
+  "homepage": "https://github.com/zoover/fluxible-isomorphic-app#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
