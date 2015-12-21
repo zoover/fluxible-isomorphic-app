@@ -80,3 +80,114 @@ server.listen(port, function() {
 ```
 
 Try running this script with node.js by typing `node server.js`. Check localhost:3000 in your favorite browser, it should show 'hello world'.
+
+#### Setup Gulp tasks ####
+
+Before we will start to write the React components of the app we need to setup a tasks that will help us convert the JSX syntax used by React to plain Javascript and build a 'bundle.js' that the client will use. Gulp is a good system to do this: it's designed to automate tasks, such as minifying, copying and bundling JavaScript files.
+
+Let's start by adding Gulp to our project by typing `npm install --save gulp` in the command line. This will add Gulp to our dependencies list.
+
+We can now start building a gulpfile.js that will contain a task that copies our source code into a 'bundle.js'. So we create a new file named 'gulpfile.js and start working from there.
+
+```
+var gulp = require('gulp');
+```
+
+Let's create our first task and call it 'build':
+
+```
+gulp.task('build', function() {
+  //task will be described here
+});
+```
+
+There are a few things we need to do in order to make this work. First we need to use something that will help is include all the required node modules for our project, such as React and Fluxbile. Browserify is a handy tool to do this. It lets you require('modules') in the browser by bundling up all your dependencies.
+
+Run `npm install --save browserify` to install it and add it to your gulpfile:
+
+```
+var browserify = require('browserify');
+```
+
+Next up is Reactify. A tool used to transform React's JSX syntax into plain old JavaScript.
+
+Run `npm install --save reactify` to install and then add it to your gulpfile:
+
+```
+var reactify = require('reactify');
+```
+
+Last but not least we need Vinyl-Source-Stream. It's used to convert the bundle.js into the type of stream Gulp is expecting. Run `npm install --save vinyl-source-stream` and add:
+
+```
+var source = require('vinyl-source-stream');
+```
+
+Now define a config variable with some settings we'll use in the tasks. These folders and files are not there yet, but don't worry, we'll add them later!
+
+```
+var config = {
+  entry_file: './source/client.js',
+  destination_folder: './build/',
+  destination_file: 'bundle.js'
+}
+```
+
+We're ready to complete our task now. It will bundle all our dependencies, transform JSX into JS and bundle everything into a bundle.js inside our build folder.
+
+```
+gulp.task('build', function() {
+  browserify(config.entry_file)
+    .transform(reactify)
+    .bundle()
+    .on('error', console.error.bind(console))
+    .pipe(source(config.destination_file))
+    .pipe(gulp.dest(config.destination_folder));
+});
+```
+
+Before we can test, let's create a client.js that will import a simple React component(main.jsx), so we can check if this actually works.
+
+Place inside app/main.jsx:
+
+```
+var React = require('react');
+
+var Main = React.createClass({
+render: function() {
+  return (
+    <div>
+      <h1>This will be our React component</h1>
+    </div>
+  )
+}
+
+});
+
+module.exports = Main;
+```
+
+Place inside client.js:
+
+```
+var app = require('./app/main.jsx');
+```
+
+So, let's try this task out. Type `gulp build` to run the task. It will create a build folder, with a 'bundle.js' inside. Near the top of the file we will find back the pieces of the React component we've build:
+
+```
+var Main = React.createClass({displayName: "Main",
+render: function() {
+  return (
+    React.createElement("div", null,
+      React.createElement("h1", null, "This will be our React component")
+    )
+  )
+}
+
+});
+
+module.exports = Main;
+```
+
+As you can see the html markup from the component has been correctly transpiled to plain JavaScript, also our React module has been imported. Because we don't want to bother you with running this code now, just assume that it's working. We'll use this code later to actually build the page on the server, return the html to the client and then let the client take over the application.
