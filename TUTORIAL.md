@@ -26,6 +26,8 @@ In web development isomorphic means that the codebase will run on both server an
 
 ### 3. Step-by-step tutorial ###
 
+In this chapter we'll explain how to build an isomorphic app step-by-step. Each subchapter has it's own working codebase inside the 'Step-By-Step-Tutorial' folder.
+
 #### Prerequisites ####
 
 Tools installed:
